@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3333
+
+###
+POST {{baseUrl}}/events
+Content-Type: application/json
+
+{
+  "title": "Unit Summit",
+  "details": "Um evento para quem é apaixonado por programação",
+  "maximumAttendees": 120
+}
