@@ -23,4 +23,20 @@ Content-Type: application/json
 }
 
 ###
+POST {{baseUrl}}/events/0690fdeb-d32e-43c6-be6a-eb7e8fd53f4d/attendees
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com"
+}
+
+###
 GET {{baseUrl}}/attendees/1/badge
+
+###
+GET {{baseUrl}}/events/0690fdeb-d32e-43c6-be6a-eb7e8fd53f4d/attendees
+
+
+###
+GET {{baseUrl}}/events/0690fdeb-d32e-43c6-be6a-eb7e8fd53f4d/attendees?query=john
