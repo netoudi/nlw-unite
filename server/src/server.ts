@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { createEvent } from '@/routes/create-event';
+import { registerForEvent } from '@/routes/register-for-event';
 
 const app = fastify();
 
@@ -13,6 +14,7 @@ app.get('/', async () => {
 });
 
 app.register(createEvent);
+app.register(registerForEvent);
 
 app
   .listen({

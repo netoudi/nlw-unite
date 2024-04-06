@@ -9,3 +9,12 @@ Content-Type: application/json
   "details": "Um evento para quem é apaixonado por programação",
   "maximumAttendees": 120
 }
+
+###
+POST {{baseUrl}}/events/0690fdeb-d32e-43c6-be6a-eb7e8fd53f4d/attendees
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com"
+}
