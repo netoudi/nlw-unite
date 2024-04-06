@@ -2,6 +2,7 @@ import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import fastify from 'fastify';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import { errorHandler } from '@/error-handler';
 import { checkIn } from '@/routes/check-in';
 import { createEvent } from '@/routes/create-event';
 import { getAttendeeBadge } from '@/routes/get-attendee-badge';
@@ -42,6 +43,8 @@ app.register(getEvent);
 app.register(getAttendeeBadge);
 app.register(checkIn);
 app.register(getEventAttendees);
+
+app.setErrorHandler(errorHandler);
 
 app
   .listen({

@@ -1,6 +1,7 @@
 import { type FastifyInstance } from 'fastify';
 import { type ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { BadRequest } from '@/_errors/bad-request';
 import { prisma } from '@/lib/prisma';
 
 export async function getEvent(app: FastifyInstance): Promise<void> {
@@ -49,7 +50,7 @@ export async function getEvent(app: FastifyInstance): Promise<void> {
       });
 
       if (event === null) {
-        throw new Error('Event not found');
+        throw new BadRequest('Event not found');
       }
 
       return replay.status(201).send({
