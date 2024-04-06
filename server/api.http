@@ -11,6 +11,9 @@ Content-Type: application/json
 }
 
 ###
+GET {{baseUrl}}/events/0690fdeb-d32e-43c6-be6a-eb7e8fd53f4d
+
+###
 POST {{baseUrl}}/events/0690fdeb-d32e-43c6-be6a-eb7e8fd53f4d/attendees
 Content-Type: application/json
 
