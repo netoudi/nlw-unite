@@ -9,7 +9,7 @@ export function InputSearch(props: InputSearchProps) {
       <Search className="size-4 text-emerald-300" />
       <input
         type="text"
-        className="bg-transparent flex-1 outline-none"
+        className="bg-transparent flex-1 outline-none border-0 p-0 text-sm"
         placeholder="Buscar participante..."
         {...props}
       />
