@@ -6,17 +6,29 @@ import { Table } from '@/components/table';
 import { TableCell } from '@/components/table-cell';
 import { TableHeader } from '@/components/table-header';
 import { TableRow } from '@/components/table-row';
-import { attendees } from '@/data/attendees';
+import { eventService } from '@/services/event-service';
+import { EVENT_ID, ITEMS_PER_PAGE } from '@/utils/constants';
 import { timeAgo } from '@/utils/formatter';
+import { Attendee } from '@/utils/models';
 
 export function AttendeeList() {
   const [search, setSearch] = React.useState('');
   const [page, setPage] = React.useState(1);
+  const [attendees, setAttendees] = React.useState<Attendee[]>([]);
+  const [total, setTotal] = React.useState(0);
 
-  const totalPage = Math.ceil(attendees.length / 10);
+  React.useEffect(() => {
+    eventService.getAttendees({ eventId: EVENT_ID, page, search }).then((response) => {
+      setAttendees(response.attendees);
+      setTotal(response.total);
+    });
+  }, [page, search]);
+
+  const totalPage = Math.ceil(total / ITEMS_PER_PAGE);
 
   function onSearchInputChanged(event: React.ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
+    setPage(1);
   }
 
   function goToFirstPage() {
@@ -30,13 +42,13 @@ export function AttendeeList() {
   }
 
   function goToNextPage() {
-    if (page < Math.ceil(attendees.length / 10)) {
+    if (page < totalPage) {
       setPage(page + 1);
     }
   }
 
   function goToLastPage() {
-    setPage(Math.ceil(attendees.length / 10));
+    setPage(totalPage);
   }
 
   return (
@@ -60,7 +72,7 @@ export function AttendeeList() {
           </TableRow>
         </thead>
         <tbody>
-          {attendees.slice((page - 1) * 10, page * 10).map((attendee) => (
+          {attendees.map((attendee) => (
             <TableRow key={attendee.id} className="hover:bg-white/5">
               <TableCell>
                 <input type="checkbox" className="size-4 bg-black/20 rounded border border-white/10" />
@@ -73,7 +85,7 @@ export function AttendeeList() {
                 </div>
               </TableCell>
               <TableCell>{timeAgo(attendee.createdAt)}</TableCell>
-              <TableCell>{timeAgo(attendee.checkedInAt)}</TableCell>
+              <TableCell>{attendee.checkedInAt !== null ? timeAgo(attendee.checkedInAt) : '-'}</TableCell>
               <TableCell>
                 <IconButton transparent>
                   <MoreHorizontal className="size-4" />
@@ -84,11 +96,11 @@ export function AttendeeList() {
         </tbody>
         <tfoot>
           <tr>
-            <TableCell colSpan={3}>Mostrando 10 de {attendees.length} items</TableCell>
+            <TableCell colSpan={3}>Mostrando 10 de {total} items</TableCell>
             <TableCell colSpan={3} className="text-right">
               <div className="inline-flex items-center gap-8">
                 <span>
-                  Página {page} de {Math.ceil(attendees.length / 10)}
+                  Página {page} de {totalPage}
                 </span>
                 <div className="flex gap-1.5">
                   <IconButton onClick={goToFirstPage} disabled={page === 1}>
