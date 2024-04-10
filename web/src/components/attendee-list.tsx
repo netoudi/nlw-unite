@@ -12,8 +12,14 @@ import { timeAgo } from '@/utils/formatter';
 import { Attendee } from '@/utils/models';
 
 export function AttendeeList() {
-  const [search, setSearch] = React.useState('');
-  const [page, setPage] = React.useState(1);
+  const [search, setSearch] = React.useState<string>(() => {
+    const url = new URL(window.location.toString());
+    return url.searchParams.has('search') ? String(url.searchParams.get('search')) : '';
+  });
+  const [page, setPage] = React.useState<number>(() => {
+    const url = new URL(window.location.toString());
+    return url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
+  });
   const [attendees, setAttendees] = React.useState<Attendee[]>([]);
   const [total, setTotal] = React.useState(0);
 
@@ -26,29 +32,43 @@ export function AttendeeList() {
 
   const totalPage = Math.ceil(total / ITEMS_PER_PAGE);
 
+  function setCurrentSearch(search: string) {
+    const url = new URL(window.location.toString());
+    url.searchParams.set('search', String(search));
+    window.history.pushState({}, '', url);
+    setSearch(search);
+  }
+
+  function setCurrentPage(page: number) {
+    const url = new URL(window.location.toString());
+    url.searchParams.set('page', String(page));
+    window.history.pushState({}, '', url);
+    setPage(page);
+  }
+
   function onSearchInputChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearch(event.target.value);
-    setPage(1);
+    setCurrentSearch(event.target.value);
+    setCurrentPage(1);
   }
 
   function goToFirstPage() {
-    setPage(1);
+    setCurrentPage(1);
   }
 
   function goToPreviousPage() {
     if (page > 1) {
-      setPage(page - 1);
+      setCurrentPage(page - 1);
     }
   }
 
   function goToNextPage() {
     if (page < totalPage) {
-      setPage(page + 1);
+      setCurrentPage(page + 1);
     }
   }
 
   function goToLastPage() {
-    setPage(totalPage);
+    setCurrentPage(totalPage);
   }
 
   return (
